@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CopierShould {
 
-    class MockDestination implements Destination {
+    class DestinationSpy implements Destination {
         private boolean called;
 
         @Override
@@ -18,14 +18,19 @@ public class CopierShould {
         }
     }
 
+    class SourceStub implements Source {
+        @Override
+        public char getChar() {
+            return 0;
+        }
+    }
+
     @Test
     public void calls_setChar_on_destination() {
-        var mockDestination = new MockDestination();
-        var dummySource = new Source() {
-            @Override public char getChar() { return '\0'; }
-        };
-        var copier = new Copier(dummySource, mockDestination);
+        var destinationSpy = new DestinationSpy();
+        var sourceStub = new SourceStub();
+        var copier = new Copier(sourceStub, destinationSpy);
         copier.copy();
-        assertThat(mockDestination.setCharWasCalled(), is(true));
+        assertThat(destinationSpy.setCharWasCalled(), is(true));
     }
 }
