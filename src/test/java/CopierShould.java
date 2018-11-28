@@ -1,12 +1,13 @@
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CopierShould {
 
@@ -48,4 +49,17 @@ public class CopierShould {
 
         assertThat(destination.chars().get(0), is(testChar));
     }
+
+    @Test
+    public void not_copy_newline_from_source_to_destination() {
+        final char testChar = '\n';
+        var source = new MockSource().using(testChar);
+        var destination = new DestinationSpy();
+
+        new Copier(source, destination).copy();
+
+        assertThat(destination.chars(), is(emptyList()));
+    }
+
+
 }
