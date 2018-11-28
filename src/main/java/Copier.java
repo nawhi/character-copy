@@ -1,12 +1,14 @@
 public class Copier {
 
+    private Source source;
     private Destination destination;
 
     public Copier(Source source, Destination destination) {
+        this.source = source;
         this.destination = destination;
     }
 
     public void copy() {
-        destination.setChar('\0');
+        destination.setChar(source.getChar());
     }
 }
