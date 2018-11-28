@@ -1,66 +1,51 @@
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CopierShould {
 
-    class DestinationStub implements Destination {
+    class MockSource implements Source {
+
+        private char charToReturn;
+
         @Override
-        public void setChar(char c) {}
+        public char getChar() {
+            return charToReturn;
+        }
+
+        public Source using(char c) {
+            this.charToReturn = c;
+            return this;
+        }
     }
 
     class DestinationSpy implements Destination {
-        private boolean called;
+        private List<Character> chars = new ArrayList<>();
 
         @Override
         public void setChar(char c) {
-            called = true;
+            chars.add(c);
         }
 
-        public boolean setCharWasCalled() {
-            return called;
-        }
-    }
-
-    class SourceStub implements Source {
-        @Override
-        public char getChar() {
-            return 0;
-        }
-    }
-
-    class SourceSpy implements Source {
-        private boolean called;
-
-        @Override
-        public char getChar() {
-            called = true;
-            return 0;
-        }
-
-        public boolean getCharWasCalled() {
-            return called;
+        private List<Character> chars() {
+            return chars;
         }
     }
 
     @Test
-    public void call_setChar_on_destination() {
-        var destinationSpy = new DestinationSpy();
-        var sourceStub = new SourceStub();
+    public void copy_character_from_source_to_destination() {
+        final char testChar = 'X';
+        var source = new MockSource().using(testChar);
+        var destination = new DestinationSpy();
 
-        new Copier(sourceStub, destinationSpy).copy();
+        new Copier(source, destination).copy();
 
-        assertThat(destinationSpy.setCharWasCalled(), is(true));
-    }
-
-    @Test
-    public void call_getChar_on_source() {
-        var destinationStub = new DestinationStub();
-        var sourceSpy = new SourceSpy();
-
-        new Copier(sourceSpy, destinationStub).copy();
-
-        assertThat(sourceSpy.getCharWasCalled(), is(true));
+        assertThat(destination.chars().get(0), is(testChar));
     }
 }
