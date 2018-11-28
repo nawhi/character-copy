@@ -45,7 +45,7 @@ public class CopierShould {
     }
 
     @Test
-    public void calls_setChar_on_destination() {
+    public void call_setChar_on_destination() {
         var destinationSpy = new DestinationSpy();
         var sourceStub = new SourceStub();
 
@@ -55,7 +55,7 @@ public class CopierShould {
     }
 
     @Test
-    public void calls_getChar_on_source() {
+    public void call_getChar_on_source() {
         var destinationStub = new DestinationStub();
         var sourceSpy = new SourceSpy();
 
