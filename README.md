@@ -4,9 +4,9 @@ The character copier is a simple class that reads characters from a source and c
 
 When the method Copy is called on the copier then it should read characters from the source and copy them to the destination until the source returns a newline (‘\n’). 
 
-The exercise is to implement the character copier using test doubles for the source and the destination (try using spies (manually written mocks) and mocks written with a mocking framework. 
+The exercise is to implement the character copier using test doubles for the source and the destination (try using spies (manually written mocks) and mocks written with a mocking framework.
 
-Start from these definitions:
+The master branch contains the starting point, with definitions of `Copier` and the `Source` and `Destination` interfaces. Branch `manual-mocks` contains manually-mocked `Source` and `Destination` objects.
 
 ```
 public class Copier
