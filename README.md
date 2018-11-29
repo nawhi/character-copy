@@ -6,22 +6,4 @@ When the method Copy is called on the copier then it should read characters from
 
 The exercise is to implement the character copier using test doubles for the source and the destination (try using spies (manually written mocks) and mocks written with a mocking framework.
 
-The master branch contains the starting point, with definitions of `Copier` and the `Source` and `Destination` interfaces. Branch `manual-mocks` contains manually-mocked `Source` and `Destination` objects.
-
-```
-public class Copier
-{
-    public Copier(…) {}
-    public void copy() {}
-}
-
-public interface Source
-{
-    char getChar();
-}
-
-public interface Destination
-{
-    void setChar(char character);
-}
-```
+The master branch contains an implementation using the Mockito framework. Branch `manual-mocks` contains manually-mocked `Source` and `Destination` objects.
