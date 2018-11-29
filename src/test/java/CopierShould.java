@@ -40,7 +40,7 @@ public class CopierShould {
 
     @ParameterizedTest
     @ValueSource(strings={"a", "5", "#"})
-    public void copy_single_characters(String input) {
+    public void copy_single_character(String input) {
         final char testChar = input.charAt(0);
 
         var source = new MockSource(testChar);
@@ -52,7 +52,7 @@ public class CopierShould {
     }
 
     @Test
-    public void not_copy_newline_from_source_to_destination() {
+    public void not_copy_newline() {
         final char testChar = '\n';
         var source = new MockSource(testChar);
         var destination = new DestinationSpy();
