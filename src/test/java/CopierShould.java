@@ -53,14 +53,21 @@ public class CopierShould {
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"abcde\n", "56789\n", "!\"£$%\n"})
-    public void copy_multiple_characters_until_newline(String input) {
+    @ValueSource(strings={
+            "abcde\n",
+            "56789\n",
+            "!\"£$%\n",
+            "12\n345",
+            "%%^^*\r&\0\n\0\b\r"
+    })
+    public void copy_characters_until_newline(String input) {
         var source = new MockSource(input);
         var destination = new DestinationSpy();
 
         new Copier(source, destination).copy();
 
-        assertThat(destination.chars(), is(input.replace("\n", "")));
+        String expected = input.substring(0, input.indexOf("\n"));
+        assertThat(destination.chars(), is(expected));
     }
 
 
