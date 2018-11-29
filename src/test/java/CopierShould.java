@@ -2,10 +2,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -13,15 +15,15 @@ public class CopierShould {
 
     class MockSource implements Source {
 
-        private char charToReturn;
+        private Queue<Character> chars = new ArrayDeque<>();
 
-        public MockSource(char c) {
-            this.charToReturn = c;
+        public MockSource(String input) {
+            input.chars().forEach(c -> chars.add((char) c));
         }
 
         @Override
         public char getChar() {
-            return charToReturn;
+            return chars.remove();
         }
     }
 
@@ -33,33 +35,32 @@ public class CopierShould {
             chars.add(c);
         }
 
-        private List<Character> chars() {
-            return chars;
+        private String chars() {
+            return chars.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining());
         }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings={"a", "5", "#"})
-    public void copy_single_character(String input) {
-        final char testChar = input.charAt(0);
-
-        var source = new MockSource(testChar);
-        var destination = new DestinationSpy();
-
-        new Copier(source, destination).copy();
-
-        assertThat(destination.chars().get(0), is(testChar));
     }
 
     @Test
     public void not_copy_newline() {
-        final char testChar = '\n';
-        var source = new MockSource(testChar);
+        var source = new MockSource("\n");
         var destination = new DestinationSpy();
 
         new Copier(source, destination).copy();
 
-        assertThat(destination.chars(), is(emptyList()));
+        assertThat(destination.chars(), is(""));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings={"abcde\n", "56789\n", "!\"£$%\n"})
+    public void copy_multiple_characters_until_newline(String input) {
+        var source = new MockSource(input);
+        var destination = new DestinationSpy();
+
+        new Copier(source, destination).copy();
+
+        assertThat(destination.chars(), is(input.replace("\n", "")));
     }
 
 

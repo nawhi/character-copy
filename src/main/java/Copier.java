@@ -10,7 +10,7 @@ public class Copier {
 
     public void copy() {
         char c;
-        if ((c = source.getChar()) != '\n')
+        while ((c = source.getChar()) != '\n')
             destination.setChar(c);
     }
 }
